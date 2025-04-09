@@ -33,6 +33,7 @@ public class MainApp {
                 user_input.next(); // Clear the invalid input
                 invalidChoice = true;
             }
+
         } while (invalidChoice);
 
         switch (choice) {
@@ -61,6 +62,7 @@ public class MainApp {
                 System.out.println("Goodbye!");
                 break;
         }
+
     }
 
     public static void display_menu_items() {
