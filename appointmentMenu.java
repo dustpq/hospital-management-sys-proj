@@ -35,3 +35,7 @@ class Appointment {
     }
 
 }
+
+class AppointmentList {
+
+}
