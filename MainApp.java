@@ -16,7 +16,7 @@ public class MainApp {
 
         do {
             clearScreen();
-            display_menu_items();
+            displayMenuItems();
 
             // Display the invalid choice message after the menu items
             if (invalidChoice) {
@@ -66,7 +66,7 @@ public class MainApp {
 
     }
 
-    public static void display_menu_items() {
+    public static void displayMenuItems() {
         //This lets us display the choices without having a ton of System.out statements in the main method
         System.out.println("Welcome to the hospital management system!");
         System.out.println("What would you like to do?");
