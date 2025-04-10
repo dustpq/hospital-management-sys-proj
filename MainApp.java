@@ -44,6 +44,7 @@ public class MainApp {
             case 2:
                 System.out.println("Starting appointment management...");
                 //Insert method to start appointment menu
+                appointmentMenu.startMenu();
                 break;
             case 3:
                 System.out.println("Starting doctor management...");
@@ -75,6 +76,10 @@ public class MainApp {
         System.out.println("4. Manage Patient Queue");
         System.out.println("5. Search");
         System.out.println("6. Exit");
+    }
+
+    public static void loadData() {
+
     }
 
     public static void clearScreen() {
