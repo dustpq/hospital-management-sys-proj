@@ -23,4 +23,4 @@
 5.) ***Search Functionality:***
 - Implement search functions to look up patients, doctors, or appointments by various parameters.
 - Data Structure: *Hash Tables* for efficient lookup or *Linked Lists* for sequential searching.
-- ***Person in charge of this:*** Dustin
+- **To be implemented in each person's menu**
