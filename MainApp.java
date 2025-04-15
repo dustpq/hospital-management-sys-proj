@@ -9,7 +9,7 @@ public class MainApp {
     }
 
     public static void mainMenu() throws InterruptedException {
-        Set<Integer> validMenuOptions = Set.of(1, 2, 3, 4, 5, 6);
+        Set<Integer> validMenuOptions = Set.of(1, 2, 3, 4, 5);
         int choice = -1;
         Scanner user_input = new Scanner(System.in);
         boolean invalidChoice = false;
@@ -22,8 +22,7 @@ public class MainApp {
             System.out.println("2. Manage Appointments");
             System.out.println("3. Manage Doctors");
             System.out.println("4. Manage Patient Queue");
-            System.out.println("5. Search");
-            System.out.println("6. Exit");
+            System.out.println("5. Exit");
 
             // Display the invalid choice message after the menu items
             if (!invalidChoice) {
@@ -63,10 +62,6 @@ public class MainApp {
                 //Insert method to start patient queue method
                 break;
             case 5:
-                System.out.println("Starting search function...");
-                //Insert method to start search method
-                break;
-            case 6:
                 System.out.println("Exiting...");
                 System.out.println("Goodbye!");
                 break;
