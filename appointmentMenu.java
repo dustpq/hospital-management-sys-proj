@@ -1,11 +1,18 @@
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 
 public class appointmentMenu {
 
     static PriorityQueue<Appointment> appointmentQueue = new PriorityQueue<>(
-            (a, b) -> a.getDetails("date").compareTo(b.getDetails("date"))
-                    + a.getDetails("time").compareTo(b.getDetails("time"))
+            (a, b) ->
+                      b.getDetails("date").compareTo(a.getDetails("date"))
+                    + b.getDetails("time").compareTo(a.getDetails("time"))
     );
+
+    static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+
 
     public static void mainMenu() throws InterruptedException {
 
@@ -60,29 +67,55 @@ public class appointmentMenu {
 
     }
 
-    public static void newAppointmentMenu() {
+    public static void newAppointmentMenu() throws InterruptedException {
+        MainApp.clearScreen();
         System.out.println("New Appointment Creation");
-        try (Scanner user_input = new Scanner(System.in)) {
+        Scanner user_input = new Scanner(System.in);
 
-            System.out.print("Enter patient name: ");
-            String name = user_input.nextLine();
-            System.out.print("Enter appointment date (YYYY-MM-DD): ");
-            String date = user_input.nextLine();
-            System.out.print("Enter appointment time (HH:MM): ");
-            String time = user_input.nextLine();
-            System.out.print("Enter doctor name: ");
-            String doctor_name = user_input.nextLine();
+        System.out.print("Enter patient name: ");
+        String name = user_input.nextLine();
 
-            Appointment newAppointment = new Appointment(name, date, time, doctor_name);
-            appointmentQueue.add(newAppointment);
-
+        System.out.print("Enter appointment date (MM/dd/yyyy) case-sensitive: ");
+        String date = user_input.nextLine();
+        while (!validateFormat(date, "date")) {
+            System.out.println("Invalid format! Try again.");
+            System.out.print("Enter appointment date (MM/dd/yyyy) case-sensitive: ");
+            date = user_input.nextLine();
         }
+
+        System.out.print("Enter appointment time (hh:mm _M) case-sensitive: ");
+        String time = user_input.nextLine();
+        while (!validateFormat(time, "time")) {
+            System.out.println("Invalid format! Try again.");
+            System.out.print("Enter appointment time (hh:mm a) case-sensitive: ");
+            time = user_input.nextLine();
+        }
+
+        System.out.print("Enter doctor name: ");
+        String doctor_name = user_input.nextLine();
+
+        Appointment newAppointment = new Appointment(name, date, time, doctor_name);
+        appointmentQueue.add(newAppointment);
+        System.out.println("New Appointment created!");
+
+        System.out.println("Returning to appointment menu...");
+        pause(1000);
+        mainMenu();
+
     }
 
-    public static void manageExistingMenu() {
+    public static void manageExistingMenu() throws InterruptedException {
         try (Scanner user_input = new Scanner(System.in)) {
             MainApp.clearScreen();
             System.out.println("Managing existing appointments...");
+            System.out.println("Current Appointments: ");
+            int order = 1;
+
+            for (Appointment appointment : appointmentQueue) {
+                System.out.print(order + ".) ");
+                appointment.printDetails();
+            }
+
         }
     }
 
@@ -92,6 +125,24 @@ public class appointmentMenu {
             appointment.printDetails();
             System.out.println();
         }
+    }
+
+    public static boolean validateFormat(String datetime, String type) {
+        boolean result = false;
+        if (Objects.equals(type, "date")) {
+            try {
+                LocalDate.parse(datetime, dateFormatter);
+                result = true;
+            } catch (DateTimeParseException _) {}
+
+        }
+        if (Objects.equals(type, "time")) {
+            try {
+                LocalTime.parse(datetime, timeFormatter);
+                result = true;
+            } catch (DateTimeParseException _) {}
+        }
+        return result;
     }
 
     public static void pause(int time) throws InterruptedException {
@@ -140,10 +191,12 @@ class Appointment {
     }
 
     public void printDetails() {
-        System.out.println("Patient name: " + name);
-        System.out.println("Date of appointment: " + date);
-        System.out.println("Time of appointment: " + time);
-        System.out.println("Doctor Attending: " + doctor_name);
+        System.out.println(
+                "Appointment for " + name +
+                " on " + date +
+                " at " + time +
+                " with Dr. " + doctor_name
+        );
     }
 
 }
