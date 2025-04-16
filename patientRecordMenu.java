@@ -25,7 +25,7 @@ public class patientRecordMenu {
     static Patient[] patients = new Patient[100];
     static int patientCount = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { //remove this, make it a method to be used in the mainmenu
         Scanner sc = new Scanner(System.in);
         int choice;
 
