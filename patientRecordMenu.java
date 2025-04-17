@@ -1,26 +1,5 @@
 import java.util.Scanner;
 
-class Patient {
-    String name;
-    int age;
-    String diagnosis;
-    String treatmentHistory;
-
-    Patient(String name, int age, String diagnosis, String treatmentHistory) {
-        this.name = name;
-        this.age = age;
-        this.diagnosis = diagnosis;
-        this.treatmentHistory = treatmentHistory;
-    }
-
-    void display() {
-        System.out.println("Name: " + name);
-        System.out.println("Age: " + age);
-        System.out.println("Diagnosis: " + diagnosis);
-        System.out.println("Treatment History: " + treatmentHistory);
-    }
-}
-
 public class patientRecordMenu {
     static Patient[] patients = new Patient[100];
     static int patientCount = 0;
@@ -57,7 +36,7 @@ public class patientRecordMenu {
         System.out.print("Enter name: ");
         String name = sc.nextLine();
         System.out.print("Enter age: ");
-        int age = sc.nextInt();
+        String age = sc.nextLine();
         sc.nextLine(); // consume newline
         System.out.print("Enter diagnosis: ");
         String diagnosis = sc.nextLine();
@@ -86,7 +65,7 @@ public class patientRecordMenu {
         boolean found = false;
 
         for (int i = 0; i < patientCount; i++) {
-            if (patients[i].name.equalsIgnoreCase(searchName)) {
+            if (patients[i].getDetail("name").equalsIgnoreCase(searchName)) {
                 System.out.println("\nPatient Found:");
                 patients[i].display();
                 found = true;

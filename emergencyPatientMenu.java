@@ -4,9 +4,9 @@ import java.util.Scanner;
 public class emergencyPatientMenu {
 
     // PriorityQueue to store patients, sorting based on severity level
-    static PriorityQueue<emergencyPatient> patientQueue = new PriorityQueue<>((a, b) -> {
+    static PriorityQueue<Patient> patientQueue = new PriorityQueue<>((a, b) -> {
         // Checking the severity levels and sorting them
-        return b.getSeverity().compareTo(a.getSeverity());
+        return b.getDetail("severity").compareTo(a.getDetail("severity"));
     });
 
     public static void main(String[] args) {
@@ -47,7 +47,7 @@ public class emergencyPatientMenu {
                     }
 
                     // this is to make a new object 
-                    emergencyPatient newPatient = new emergencyPatient(name, condition, severity);
+                    Patient newPatient = new Patient(name, condition, severity);
                     // Adding the patient to the queue based on their severity
                     patientQueue.add(newPatient);
                     System.out.println("Patient added");
@@ -60,7 +60,7 @@ public class emergencyPatientMenu {
                     } else {
                         System.out.println(" Patients by severity level:");
                       //looping and making patient details 
-                        for (emergencyPatient patient : patientQueue) {
+                        for (Patient patient : patientQueue) {
                             patient.printDetails();
                         }
                     }
@@ -77,33 +77,3 @@ public class emergencyPatientMenu {
         }
     }
 }
-
-//  Store details of each emergency patient
-class emergencyPatient {
-
-    private String name;
-    private String condition;
-    private String severity;
-
-    // we use the constructor to give an object its value or to tell what exactly the object is 
-    public emergencyPatient(String name, String condition, String severity) {
-        this.name = name;
-        this.condition = condition;
-        this.severity = severity;
-    }
-
-    // Getter for severity (used for comparison in PriorityQueue)
-    public String getSeverity() {
-        return severity;
-    }
-
-    // wanted the outputs to stack 
-    public void printDetails() {
-        System.out.println("*".repeat(30)); 
-        System.out.println("Patient: " + name);
-        System.out.println("Condition: " + condition);
-        System.out.println("Severity: " + severity);
-        System.out.println("*".repeat(30)); 
-    }
-}
-

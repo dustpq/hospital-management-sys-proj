@@ -6,8 +6,8 @@ public class appointmentMenu {
 
     static PriorityQueue<Appointment> appointmentQueue = new PriorityQueue<>(
             (a, b) ->
-                      b.getDetails("date").compareTo(a.getDetails("date"))
-                    + b.getDetails("time").compareTo(a.getDetails("time"))
+                      b.getDetail("date").compareTo(a.getDetail("date"))
+                    + b.getDetail("time").compareTo(a.getDetail("time"))
     );
 
     static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -147,56 +147,6 @@ public class appointmentMenu {
 
     public static void pause(int time) throws InterruptedException {
         Thread.sleep(time);
-    }
-
-}
-
-
-
-class Appointment {
-
-    private String name;
-    private String date;
-    private String time;
-    private String doctor_name;
-
-
-    public Appointment(String name, String date, String time, String doctor_name) {
-        this.name = name;
-        this.date = date;
-        this.time = time;
-        this.doctor_name = doctor_name;
-    }
-
-    //setters for the appointment
-    public String getDetails(String detail) {
-        return switch (detail) {
-            case "name" -> name;
-            case "date" -> date;
-            case "time" -> time;
-            case "doctor_name" -> doctor_name;
-            default -> null;
-        };
-    }
-
-    //getters for the appointment
-    public void setDetail(String detail, String value) {
-        switch (detail) {
-            case "name" -> name = value;
-            case "date" -> date = value;
-            case "time" -> time = value;
-            case "doctor_name" -> doctor_name = value;
-        }
-
-    }
-
-    public void printDetails() {
-        System.out.println(
-                "Appointment for " + name +
-                " on " + date +
-                " at " + time +
-                " with Dr. " + doctor_name
-        );
     }
 
 }
