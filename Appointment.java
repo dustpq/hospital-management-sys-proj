@@ -4,7 +4,7 @@ public class Appointment {
     private String date;
     private String time;
     private String doctor_name;
-
+    private Doctor attending_doctor;
 
     public Appointment(String name, String date, String time, String doctor_name) {
         this.name = name;
