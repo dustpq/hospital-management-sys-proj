@@ -5,7 +5,7 @@ public class emergencyPatientMenu {
 
     // PriorityQueue to store patients, sorting based on severity level
     static PriorityQueue<Patient> patientQueue = new PriorityQueue<>((a, b) -> {
-        // Checking the severity levels to prioritize higher severity levels
+        // Checking the severity levels and sorting them
         return b.getSeverity().compareTo(a.getSeverity());
     });
 
