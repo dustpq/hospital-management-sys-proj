@@ -99,11 +99,11 @@ class Patient {
 
     // wanted the outputs to stack 
     public void printDetails() {
-        System.out.println("*".repeat(30)); // Print a separator line of 30 stars
+        System.out.println("*".repeat(30)); 
         System.out.println("Patient: " + name);
         System.out.println("Condition: " + condition);
         System.out.println("Severity: " + severity);
-        System.out.println("*".repeat(30)); // Print another separator line
+        System.out.println("*".repeat(30)); 
     }
 }
 
