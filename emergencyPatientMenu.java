@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class emergencyPatientMenu {
 
     // PriorityQueue to store patients, sorting based on severity level
-    static PriorityQueue<Patient> patientQueue = new PriorityQueue<>((a, b) -> {
+    static PriorityQueue<emergencyPatient> patientQueue = new PriorityQueue<>((a, b) -> {
         // Checking the severity levels and sorting them
         return b.getSeverity().compareTo(a.getSeverity());
     });
@@ -47,7 +47,7 @@ public class emergencyPatientMenu {
                     }
 
                     // this is to make a new object 
-                    Patient newPatient = new Patient(name, condition, severity);
+                    emergencyPatient newPatient = new emergencyPatient(name, condition, severity);
                     // Adding the patient to the queue based on their severity
                     patientQueue.add(newPatient);
                     System.out.println("Patient added");
@@ -60,7 +60,7 @@ public class emergencyPatientMenu {
                     } else {
                         System.out.println(" Patients by severity level:");
                       //looping and making patient details 
-                        for (Patient patient : patientQueue) {
+                        for (emergencyPatient patient : patientQueue) {
                             patient.printDetails();
                         }
                     }
@@ -79,14 +79,14 @@ public class emergencyPatientMenu {
 }
 
 //  Store details of each emergency patient
-class Patient {
+class emergencyPatient {
 
     private String name;
     private String condition;
     private String severity;
 
     // we use the constructor to give an object its value or to tell what exactly the object is 
-    public Patient(String name, String condition, String severity) {
+    public emergencyPatient(String name, String condition, String severity) {
         this.name = name;
         this.condition = condition;
         this.severity = severity;
