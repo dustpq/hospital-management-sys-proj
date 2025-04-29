@@ -46,6 +46,9 @@ public class MainApp {
             case 1:
                 System.out.println("Starting patient management...");
                 //Insert method to start the patient menu
+                Thread.sleep(1000);
+                clearScreen();
+                patientRecordMenu.mainMenu();
                 break;
             case 2:
                 System.out.println("Starting appointment management...");

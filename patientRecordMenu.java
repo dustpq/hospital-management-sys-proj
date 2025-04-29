@@ -4,7 +4,7 @@ public class patientRecordMenu {
     static Patient[] patients = new Patient[100];
     static int patientCount = 0;
 
-    public static void main(String[] args) { //remove this, make it a method to be used in the mainmenu
+    public static void mainMenu() throws InterruptedException {
         Scanner sc = new Scanner(System.in);
         int choice;
 
@@ -22,7 +22,10 @@ public class patientRecordMenu {
                 case 1 -> addPatient(sc);
                 case 2 -> viewAllPatients();
                 case 3 -> searchPatient(sc);
-                case 4 -> System.out.println("Exiting program...");
+                case 4 -> {
+                    System.out.println("Exiting patient menu...");
+                    MainApp.mainMenu();
+                }
                 default -> System.out.println("Invalid choice! Please try again.");
             }
         } while (choice != 4);
