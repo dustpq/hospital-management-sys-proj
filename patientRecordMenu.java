@@ -40,7 +40,6 @@ public class patientRecordMenu {
         String name = sc.nextLine();
         System.out.print("Enter age: ");
         String age = sc.nextLine();
-        sc.nextLine(); // consume newline
         System.out.print("Enter diagnosis: ");
         String diagnosis = sc.nextLine();
         System.out.print("Enter treatment history: ");
