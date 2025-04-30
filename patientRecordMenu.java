@@ -4,7 +4,7 @@ public class patientRecordMenu {
     static Patient[] patients = new Patient[100];
     static int patientCount = 0;
 
-    public static void mainMenu() throws InterruptedException {
+    public static void mainMenu() {
         Scanner sc = new Scanner(System.in);
         int choice;
 
