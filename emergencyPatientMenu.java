@@ -9,7 +9,7 @@ public class emergencyPatientMenu {
         return b.getDetail("severity").compareTo(a.getDetail("severity"));
     });
 
-    public static void main(String[] args) {
+    public static void mainMenu() {
         // Loop to continue displaying the menu until the user exits
         Scanner scanner = new Scanner(System.in);
         while (true) {
