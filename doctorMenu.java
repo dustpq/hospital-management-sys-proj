@@ -3,15 +3,21 @@ import java.util.*;
 class Person {
 
     private String specialty;
+    private String availability;
     private List<String> patients;
 
-    public Person(String specialty) {
+    public Person(String specialty, String availability) {
         this.specialty = specialty;
+        this.availability = availability;
         this.patients = new ArrayList<>();
     }
 
     public void setSpecialty(String newSpecialty) {
         this.specialty = newSpecialty;
+    }
+
+    public void setAvailability(String newAvailability) {
+        this.availability = newAvailability;
     }
 
     public void addPatient(String newPatient) {
@@ -24,12 +30,16 @@ class Person {
         return specialty;
     }
 
+    public String getAvailability() {
+        return availability;
+    }
+
     public List<String> getPatients() {
         return patients;
     }
 
     public String toString() {
-        return "Specialty: " + specialty + " || Patients: " + String.join(", ", patients);
+        return "Specialty: " + specialty + " || Patients: " + String.join(", ", patients) + " || Availability: " + availability;
     }
 }
 
@@ -38,21 +48,27 @@ public class Doctor {
     public static void main(String[] args) {
         HashMap<String, Person> doctors = new HashMap<>();
         String[] specialties = {
-            "Cardiology", "Pediatrics", "Dermatology", "Neurology", "Oncology",
-            "Orthopedics", "Psychiatry", "Radiology", "Surgery", "Emergency Medicine"
+            "Family Medicine", "Pediatrics", "Dermatology", "Neurology", "Oncology",
+            "Orthopedics", "Psychiatry", "Radiology", "Trauma Surgeon", "Surgery", "Emergency Medicine"
+        };
+
+        String[] availabilities = {
+            "Mon-Fri: 7 AM – 3 PM", "Mon-Fri: 3 PM – 11 PM", "Mon-Fri: 11 PM – 7 AM",
+            "Sat & Sun: 7 AM – 7 PM", "Sat: 7 AM – 7 PM", "Sun: 7 PM – 7 AM"
         };
 
         Random random = new Random();
         int startingId = 2231;
 
-        // Generate 100 doctors
+        // Generates 100 doctors
         for (int i = 0; i < 100; i++) {
             String doctorId = String.valueOf(startingId + i);
             String specialty = specialties[random.nextInt(specialties.length)];
-            doctors.put(doctorId, new Person(specialty));
+            String availability = availabilities[random.nextInt(availabilities.length)];
+            doctors.put(doctorId, new Person(specialty, availability));
         }
 
-        // Generate 100 patients and randomly assign to doctors (max 10 per doctor)
+        // Generates 100 patients and randomly assigns them to doctors (max 10 per doctor)
         for (int i = 1; i <= 100; i++) {
             String patientName = "Patient" + i;
             boolean assigned = false;
@@ -60,7 +76,7 @@ public class Doctor {
                 int docId = startingId + random.nextInt(100);
                 String docKey = String.valueOf(docId);
                 Person doc = doctors.get(docKey);
-                if (doc.getPatients().size() < 10) {
+                if (doc != null && doc.getPatients().size() < 10) {
                     doc.addPatient(patientName);
                     assigned = true;
                 }
@@ -83,7 +99,7 @@ public class Doctor {
                     int count = 1;
                     for (String key : keys) {
                         Person doc = doctors.get(key);
-                        printDoctorInfo(count, doc);
+                        printDoctorInfo(count, key, doc);
                         count++;
                     }
                     break;
@@ -96,10 +112,10 @@ public class Doctor {
                         sortedKeys.sort(null);
                         int doctorNumber = sortedKeys.indexOf(searchKey) + 1;
                         Person doc = doctors.get(searchKey);
-                        System.out.println("Doctor found...");
-                        printDoctorInfo(doctorNumber, doc);
+                        System.out.println("\nDoctor found...");
+                        printDoctorInfo(doctorNumber, searchKey, doc);
                     } else {
-                        System.out.println("Doctor not found.");
+                        System.out.println("\nDoctor not found.");
                     }
                     break;
 
@@ -110,12 +126,21 @@ public class Doctor {
                         Person doctor = doctors.get(updateKey);
                         System.out.print("New specialty (current: " + doctor.getSpecialty() + "): ");
                         String newSpecialty = scanner.nextLine();
+                        System.out.print("New availability (current: " + doctor.getAvailability() + "): ");
+                        String newAvailability = scanner.nextLine();
                         if (!newSpecialty.isEmpty()) {
                             doctor.setSpecialty(newSpecialty);
                         }
-                        System.out.println("Updated: " + doctor);
+                        if (!newAvailability.isEmpty()) {
+                            doctor.setAvailability(newAvailability);
+                        }
+                        System.out.println("\nUpdated:");
+                        ArrayList<String> sortedKeys = new ArrayList<>(doctors.keySet());
+                        sortedKeys.sort(null);
+                        int doctorNumber = sortedKeys.indexOf(updateKey) + 1;
+                        printDoctorInfo(doctorNumber, updateKey, doctor);
                     } else {
-                        System.out.println("Doctor not found.");
+                        System.out.println("\nDoctor not found.");
                     }
                     break;
 
@@ -123,9 +148,9 @@ public class Doctor {
                     System.out.print("Enter doctor ID to delete: ");
                     String deleteKey = scanner.nextLine();
                     if (doctors.remove(deleteKey) != null) {
-                        System.out.println("Doctor " + deleteKey + " removed.");
+                        System.out.println("\nDoctor " + deleteKey + " removed.");
                     } else {
-                        System.out.println("Doctor not found.");
+                        System.out.println("\nDoctor not found.");
                     }
                     break;
 
@@ -134,16 +159,17 @@ public class Doctor {
                     break;
 
                 default:
-                    System.out.println("Invalid option.");
+                    System.out.println("\nInvalid option.");
             }
         }
 
         scanner.close();
     }
 
-    // Method to print doctor info
-    public static void printDoctorInfo(int index, Person doctor) {
-        System.out.println("Doctor " + index + " || Specialty: " + doctor.getSpecialty()
-                + " || Patients: " + String.join(", ", doctor.getPatients()));
+    // Doctor Info
+    public static void printDoctorInfo(int index, String doctorId, Person doctor) {
+        System.out.println("Doctor " + index + " (ID: " + doctorId + ") || Specialty: " + doctor.getSpecialty()
+                + " || Patients: " + String.join(", ", doctor.getPatients())
+                + " || Availability: " + doctor.getAvailability());
     }
 }
