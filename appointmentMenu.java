@@ -29,7 +29,7 @@ public class appointmentMenu {
      */
     public static void mainMenu() {
 
-        Set<Integer> validMenuOptions = Set.of(1, 2, 3);
+        Set<Integer> validMenuOptions = Set.of(1, 2, 3, 4);
 
         MainApp.clearScreen();
         String menuPrompt = """
@@ -54,6 +54,10 @@ public class appointmentMenu {
                 manageExistingMenu();
                 break;
             case 3:
+                System.out.println("Preparing to search for appointment...");
+                pause(1000);
+                searchAppointments();
+            case 4:
                 System.out.println("Exiting to main menu...");
                 pause(1000);
                 MainApp.mainMenu();
@@ -82,7 +86,7 @@ public class appointmentMenu {
             date = user_input.nextLine();
         }
 
-        System.out.print("Enter appointment time (hh:mm a): "); // Fixed typo in prompt
+        System.out.print("Enter appointment time (hh:mm a): ");
         String time = user_input.nextLine();
         time = time.toUpperCase();
         while (!validateFormat(time, "time")) {
@@ -346,6 +350,57 @@ public class appointmentMenu {
             } catch (DateTimeParseException _) {}
         }
         return result;
+    }
+
+    /**
+     * Allows the user to search for appointments by patient name, doctor name, or date.
+     */
+    public static void searchAppointments() {
+        MainApp.clearScreen();
+        System.out.println("Search Appointments");
+
+        System.out.println("Search by:");
+        System.out.println("1.) Patient Name");
+        System.out.println("2.) Doctor Name");
+        System.out.println("3.) Appointment Date (MM/dd/yyyy)");
+        System.out.println("4.) Go Back");
+
+        Set<Integer> validOptions = Set.of(1, 2, 3, 4);
+        int choice = getMenuChoice(validOptions, user_input, "Enter your choice:");
+
+        if (choice == 4) {
+            mainMenu();
+            return;
+        }
+
+        System.out.print("Enter search term: ");
+        String searchTerm = user_input.nextLine();
+
+        List<Appointment> results = new ArrayList<>();
+        switch (choice) {
+            case 1 -> results = appointmentList.stream()
+                    .filter(a -> a.getDetail("name").equalsIgnoreCase(searchTerm))
+                    .toList();
+            case 2 -> results = appointmentList.stream()
+                    .filter(a -> a.getDetail("doctor").equalsIgnoreCase(searchTerm))
+                    .toList();
+            case 3 -> results = appointmentList.stream()
+                    .filter(a -> a.getDetail("date").equals(searchTerm))
+                    .toList();
+        }
+
+        if (results.isEmpty()) {
+            System.out.println("No appointments found matching the search criteria.");
+        } else {
+            System.out.println("Search Results:");
+            for (Appointment appointment : results) {
+                appointment.printDetails();
+            }
+        }
+
+        System.out.println("Returning to appointment menu...");
+        pause(2000);
+        mainMenu();
     }
 
     /**

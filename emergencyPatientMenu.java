@@ -68,7 +68,9 @@ public class emergencyPatientMenu {
 
                 case 3:
                     
-                    System.out.println("Exit"); // this is to go to menu 
+                    System.out.println("Exit"); // this is to go to menu
+                    MainApp.pause(1000);
+                    MainApp.mainMenu();
                     return; // exit out loop
 
                 default:

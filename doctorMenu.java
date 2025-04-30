@@ -1,3 +1,5 @@
+import com.sun.tools.javac.Main;
+
 import java.util.LinkedHashMap;
 /**
  *
@@ -89,6 +91,9 @@ public class doctorMenu {
 
                 case "exit":
                     running = false;
+                    System.out.println("Returning to main menu...");
+                    MainApp.pause(1000);
+                    MainApp.mainMenu();
                     break;
 
                 default:
