@@ -16,14 +16,20 @@ public class doctorMenu {
             "Orthopedics", "Psychiatry", "Radiology", "Surgery", "Emergency Medicine"
         };
 
-        Random random = new Random();
+        String[] availabilities = {
+            "Mon-Fri: 7 AM – 3 PM", "Mon-Fri: 3 PM – 11 PM", "Mon-Fri: 11 PM – 7 AM",
+            "Sat & Sun: 7 AM – 7 PM", "Sat: 7 AM – 7 PM", "Sun: 7 PM – 7 AM"
+        };
 
+        Random random = new Random();
+        int startingId = 2231;
+        
         // Generate 100 doctors
-        for (int i = 1; i <= 100; i++) {
-            String doctorId = String.valueOf(i);
-            String name = "Dr" + doctorId;
+        for (int i = 0; i < 100; i++) {
+            String doctorId = String.valueOf(startingId + i);
             String specialty = specialties[random.nextInt(specialties.length)];
-            doctors.put(doctorId, new Person(name, specialty));
+            String availability = availabilities[random.nextInt(availabilities.length)];
+            doctors.put(doctorId, new Person(specialty, availability));
         }
 
         // Generate 100 patients and randomly assign to doctors (max 10 per doctor)
@@ -122,6 +128,12 @@ public class doctorMenu {
                             break;
                         }
                     }
+
+                if (!assigned) {
+                        System.out.println("\nNo available doctors to assign the patient.");
+                        patientCounter--;
+                    }
+                    break;
 
                 case "exit":
                     running = false;
