@@ -1,11 +1,14 @@
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
 public class MainApp {
 
     public static void main(String[] args) {
-        loadData();
+        if (args.length > 0 && Objects.equals(args[0], "data")) {
+            loadData();
+        }
         mainMenu();
     }
 
@@ -73,13 +76,14 @@ public class MainApp {
                 System.out.println("Exiting...");
                 System.out.println("Goodbye!");
                 pause(1000);
+                System.exit(0);
                 break;
         }
 
     }
 
     public static void loadData() {
-
+        TestDataGenerator.generateTestData();
     }
 
     public static void clearScreen() {
