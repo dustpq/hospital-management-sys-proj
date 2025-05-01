@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class TestDataGenerator {
@@ -39,16 +41,28 @@ public class TestDataGenerator {
     }
 
     private static void generateAppointments() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
         for (int i = 1; i <= 100; i++) {
             String patientName = "Patient " + i;
-            String date = String.format("%02d/15/2023", (i % 12) + 1);
-            String time = String.format("%02d:00 %s", (i % 12) + 1, (i % 2 == 0) ? "AM" : "PM");
+
+            // Generate a random date within the next month
+            LocalDate randomDate = LocalDate.now().plusDays(random.nextInt(30) + 1);
+            String date = randomDate.format(dateFormatter);
+
+            // Generate random time between 7 AM and 8 PM
+            int hour = 7 + random.nextInt(14); // 7 AM to 8 PM (14 hours range)
+            String period = (hour < 12) ? "AM" : "PM";
+            int adjustedHour = (hour > 12) ? hour - 12 : hour; // Convert to 12-hour format
+            String time = String.format("%02d:00 %s", adjustedHour, period);
+
             String doctorName = "Doctor " + (i % 10 + 1);
+
             Appointment appointment = new Appointment(patientName, date, time, doctorName);
             appointmentMenu.appointmentQueue.add(appointment);
         }
         appointmentMenu.syncAppointments();
-        System.out.println("Generated 100 test appointments.");
+        System.out.println("Generated 100 test appointments with dates spanning up to a month in advance.");
     }
 
     private static void generateDoctors() {

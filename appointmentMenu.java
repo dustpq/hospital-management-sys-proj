@@ -12,9 +12,8 @@ public class appointmentMenu {
 
     // Priority queue to store appointments, sorted by date and time in descending order.
     static PriorityQueue<Appointment> appointmentQueue = new PriorityQueue<>(
-            (a, b) ->
-                      b.getDetail("date").compareTo(a.getDetail("date"))
-                    + b.getDetail("time").compareTo(a.getDetail("time"))
+            Comparator.comparing((Appointment a) -> LocalDate.parse(a.getDetail("date"), DateTimeFormatter.ofPattern("MM/dd/yyyy")))
+                    .thenComparing(a -> LocalTime.parse(a.getDetail("time"), DateTimeFormatter.ofPattern("hh:mm a")))
     );
 
     // List to store appointments for easier iteration and pagination.
@@ -394,6 +393,8 @@ public class appointmentMenu {
         int action = getMenuChoice(Set.of(1, 2, 3), user_input, options);
 
         if (action == 3) {
+            System.out.println("Returning to previous menu...");
+            pause(1000);
             mainMenu();
             return;
         }
@@ -459,13 +460,11 @@ public class appointmentMenu {
      * Should be called whenever one of the two is updated to ensure consistency.
      */
     public static void syncAppointments() {
-        // Update the ArrayList from the PriorityQueue
         appointmentList = new ArrayList<>(appointmentQueue);
 
-        // Rebuild the PriorityQueue from the ArrayList to ensure consistency
         appointmentQueue = new PriorityQueue<>(
-                (a, b) -> b.getDetail("date").compareTo(a.getDetail("date"))
-                        + b.getDetail("time").compareTo(a.getDetail("time"))
+                Comparator.comparing((Appointment a) -> LocalDate.parse(a.getDetail("date"), DateTimeFormatter.ofPattern("MM/dd/yyyy")))
+                        .thenComparing(a -> LocalTime.parse(a.getDetail("time"), DateTimeFormatter.ofPattern("hh:mm a")))
         );
         appointmentQueue.addAll(appointmentList);
     }
