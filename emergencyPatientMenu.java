@@ -1,4 +1,4 @@
-import java.util.PriorityQueue;  // THE DASHES ARE MY NOTES 
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class emergencyPatientMenu {
@@ -16,15 +16,18 @@ public class emergencyPatientMenu {
             System.out.println("*** Emergency Patient Menu ***");
             System.out.println("1. Add new emergency patient");
             System.out.println("2. View emergency patients");
-            System.out.println("3. Exit");
+            System.out.println("3. Search patient");
+            System.out.println("4. Edit patient");
+            System.out.println("5. Delete patient");
+            System.out.println("6. Exit");
 
             System.out.print("Select an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                  //When adding a new patient 
+                    // Add a new emergency patient
                     System.out.println("Patient name:");
                     String name = scanner.nextLine();
 
@@ -43,23 +46,23 @@ public class emergencyPatientMenu {
                         } else {
                             System.out.println("***Error***");
                             System.out.println("Stable Moderate Severe");
-                        }// used to break out the loop if they have a typo 
+                        }
                     }
 
-                    // this is to make a new object 
+                    // Create a new patient object
                     Patient newPatient = new Patient(name, condition, severity);
-                    // Adding the patient to the queue based on their severity
+                    // Add the patient to the queue based on their severity
                     patientQueue.add(newPatient);
                     System.out.println("Patient added");
                     break;
 
                 case 2:
-                    // Viewing emergency quoue 
+                    // View emergency patients
                     if (patientQueue.isEmpty()) {
                         System.out.println("No patients in the queue.");
                     } else {
-                        System.out.println(" Patients by severity level:");
-                      //looping and making patient details 
+                        System.out.println("Patients by severity level:");
+                        // Loop through and display patient details
                         for (Patient patient : patientQueue) {
                             patient.printDetails();
                         }
@@ -67,11 +70,24 @@ public class emergencyPatientMenu {
                     break;
 
                 case 3:
-                    
-                    System.out.println("Exit"); // this is to go to menu
-                    MainApp.pause(1000);
-                    MainApp.mainMenu();
-                    return; // exit out loop
+                    // Search for a patient
+                    System.out.print("Enter patient name to search: ");
+                    String searchName = scanner.nextLine();
+                    boolean foundSearch = false;
+
+                    for (Patient patient : patientQueue) {
+                        if (patient.getDetail("name").equalsIgnoreCase(searchName)) {
+                            System.out.println("Patient found:");
+                            patient.printDetails(); // Show patient info
+                            foundSearch = true;
+                            break;
+                        }
+                    }
+
+                    if (!foundSearch) {
+                        System.out.println("Patient not found.");
+                    }
+                    break;
 
                 case 4:
                     // Edit a patient
@@ -79,16 +95,16 @@ public class emergencyPatientMenu {
                     String editName = scanner.nextLine();
                     boolean foundEdit = false;
 
-                    // make a new queue to temporarily store updated patients
+                    // Create a new queue to temporarily store updated patients
                     PriorityQueue<Patient> tempEditQueue = new PriorityQueue<>((a, b) -> {
                         return b.getDetail("severity").compareTo(a.getDetail("severity"));
                     });
 
-                    // go through queue to find match
+                    // Go through the queue to find a match
                     while (!patientQueue.isEmpty()) {
                         Patient p = patientQueue.poll();
                         if (p.getDetail("name").equalsIgnoreCase(editName)) {
-                            // found the patient to edit
+                            // Found the patient to edit
                             System.out.println("New name:");
                             String newName = scanner.nextLine();
 
@@ -96,7 +112,7 @@ public class emergencyPatientMenu {
                             String newCondition = scanner.nextLine();
 
                             String newSeverity = "";
-                            // validate severity again
+                            // Validate severity again
                             while (true) {
                                 System.out.print("New severity level?: ");
                                 newSeverity = scanner.nextLine();
@@ -108,15 +124,15 @@ public class emergencyPatientMenu {
                                 }
                             }
 
-                            // update patient
+                            // Update patient
                             tempEditQueue.add(new Patient(newName, newCondition, newSeverity));
                             foundEdit = true;
                         } else {
-                            tempEditQueue.add(p); // keep existing patients
+                            tempEditQueue.add(p); // Keep existing patients
                         }
                     }
 
-                    patientQueue = tempEditQueue; // replace old queue
+                    patientQueue = tempEditQueue; // Replace old queue
                     if (foundEdit) {
                         System.out.println("Patient info updated.");
                     } else {
@@ -130,7 +146,7 @@ public class emergencyPatientMenu {
                     String deleteName = scanner.nextLine();
                     boolean foundDelete = false;
 
-                    // new queue for patients we want to keep
+                    // Create a new queue for patients we want to keep
                     PriorityQueue<Patient> tempDeleteQueue = new PriorityQueue<>((a, b) -> {
                         return b.getDetail("severity").compareTo(a.getDetail("severity"));
                     });
@@ -138,7 +154,7 @@ public class emergencyPatientMenu {
                     while (!patientQueue.isEmpty()) {
                         Patient p = patientQueue.poll();
                         if (p.getDetail("name").equalsIgnoreCase(deleteName)) {
-                            foundDelete = true; // skip this patient
+                            foundDelete = true; // Skip this patient
                         } else {
                             tempDeleteQueue.add(p);
                         }
@@ -153,24 +169,11 @@ public class emergencyPatientMenu {
                     break;
 
                 case 6:
-                    // Search for a patient
-                    System.out.print("Enter patient name to search: ");
-                    String searchName = scanner.nextLine();
-                    boolean foundSearch = false;
-
-                    for (Patient patient : patientQueue) {
-                        if (patient.getDetail("name").equalsIgnoreCase(searchName)) {
-                            System.out.println("Patient found:");
-                            patient.printDetails(); // show patient info
-                            foundSearch = true;
-                            break;
-                        }
-                    }
-
-                    if (!foundSearch) {
-                        System.out.println("Patient not found.");
-                    }
-                    break;
+                    // Exit the menu
+                    System.out.println("Exit");
+                    MainApp.pause(1000);
+                    MainApp.mainMenu();
+                    return; // Exit the loop
 
                 default:
                     System.out.println("***Error***");
