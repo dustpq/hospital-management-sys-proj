@@ -5,6 +5,7 @@ public class Person {
     private String availability;
     private String specialty;
     private List<String> patients;
+    private String name; // Add a name field to the Person class
 
     public Person(String availability, String specialty) {
         this.availability = availability;
@@ -26,6 +27,14 @@ public class Person {
         }
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public String getAvailability() {
         return availability;
     }
@@ -39,6 +48,6 @@ public class Person {
     }
 
     public String toString() {
-        return "Specialty: " + specialty + " || Patients: " + String.join(", ", patients) + " || Availability: " + availability;
+        return "Name: " + name + " || Specialty: " + specialty + " || Patients: " + String.join(", ", patients) + " || Availability: " + availability;
     }
 }

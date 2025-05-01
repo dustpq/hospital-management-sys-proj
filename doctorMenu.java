@@ -9,17 +9,20 @@ import java.util.LinkedHashMap;
 import java.util.*;
 
 public class doctorMenu {
-    public static void mainMenu() {
-        HashMap<String, Person> doctors = new HashMap<>();
-        String[] specialties = {
+    static HashMap<String, Person> doctors = new HashMap<>();
+
+    static String[] specialties = {
             "Family Medicine", "Pediatrics", "Dermatology", "Neurology", "Oncology",
             "Orthopedics", "Psychiatry", "Radiology", "Trauma Surgeon", "Surgery", "Emergency Medicine"
-        };
+    };
 
-        String[] availabilities = {
+    static String[] availabilities = {
             "Mon-Fri: 7 AM – 3 PM", "Mon-Fri: 3 PM – 11 PM", "Mon-Fri: 11 PM – 7 AM",
             "Sat & Sun: 7 AM – 7 PM", "Sat: 7 AM – 7 PM", "Sun: 7 PM – 7 AM"
-        };
+    };
+
+    public static void mainMenu() {
+
 
         Random random = new Random();
         int startingId = 2231;
@@ -148,5 +151,21 @@ public class doctorMenu {
         }
 
         scanner.close();
+    }
+
+    /**
+     * Prints detailed information about a doctor.
+     * @param index The index of the doctor in the list.
+     * @param doctorId The ID of the doctor.
+     * @param doctor The Person object representing the doctor.
+     */
+    private static void printDoctorInfo(int index, String doctorId, Person doctor) {
+        System.out.println("Doctor #" + index);
+        System.out.println("ID: " + doctorId);
+        System.out.println("Name: " + doctor.getName());
+        System.out.println("Specialty: " + doctor.getSpecialty());
+        System.out.println("Availability: " + doctor.getAvailability());
+        System.out.println("Patients: " + String.join(", ", doctor.getPatients()));
+        System.out.println("-----------------------------");
     }
 }
