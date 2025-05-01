@@ -89,6 +89,24 @@ public class doctorMenu {
                     }
                     break;
 
+                case "add":
+                    System.out.print("Enter new doctor's specialty: ");
+                    String specialty = scanner.nextLine();
+                    System.out.print("Enter new doctor's availability: ");
+                    String availability = scanner.nextLine();
+
+                    int maxId = doctors.keySet().stream()
+                            .mapToInt(Integer::parseInt)
+                            .max()
+                            .orElse(startingId + 99);
+
+                    String newDoctorId = String.valueOf(maxId + 1);
+                    doctors.put(newDoctorId, new Person(specialty, availability));
+
+                    System.out.println("\nDoctor added successfully:");
+                    printDoctorInfo(doctors.size(), newDoctorId, doctors.get(newDoctorId));
+                    break;
+
                 case "exit":
                     running = false;
                     System.out.println("Returning to main menu...");
