@@ -57,7 +57,7 @@ public class TestDataGenerator {
             String name = "Doctor " + i;
             String specialty = doctorMenu.specialties[random.nextInt(doctorMenu.specialties.length)];
             String availability = doctorMenu.availabilities[random.nextInt(doctorMenu.availabilities.length)];
-            Person doctor = new Person(availability, specialty, name);
+            Doctor doctor = new Doctor(availability, specialty, name);
             doctorMenu.doctors.put(id, doctor);
         }
         System.out.println("Generated 100 test doctors.");
