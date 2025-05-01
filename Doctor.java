@@ -1,97 +1,60 @@
-import java.util.LinkedHashMap;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Doctor {
-    public static void main(String[] args) {
-        HashMap<String, Person> doctors = new HashMap<>();
-        String[] specialties = {
-            "Cardiology", "Pediatrics", "Dermatology", "Neurology", "Oncology",
-            "Orthopedics", "Psychiatry", "Radiology", "Surgery", "Emergency Medicine"
-        };
+    private String availability;
+    private String specialty;
+    private List<String> patients;
+    private String name; // Add a name field to the Person class
 
-        Random random = new Random();
+    public Doctor(String availability, String specialty) {
+        this.availability = availability;
+        this.specialty = specialty;
+        this.patients = new ArrayList<>();
+    }
 
-        // Generate 100 doctors
-        for (int i = 1; i <= 100; i++) {
-            String doctorId = String.valueOf(i);
-            String name = "Dr" + doctorId;
-            String specialty = specialties[random.nextInt(specialties.length)];
-            doctors.put(doctorId, new Person(name, specialty));
+    public Doctor(String availability, String specialty, String name) {
+        this.availability = availability;
+        this.specialty = specialty;
+        this.patients = new ArrayList<>();
+        this.name = name;
+    }
+
+    public void setAvailability(String newAvailability) {
+        this.availability = newAvailability;
+    }
+
+    public void setSpecialty(String newSpecialty) {
+        this.specialty = newSpecialty;
+    }
+
+    public void addPatient(String newPatient) {
+        if (patients.size() < 10) {
+            this.patients.add(newPatient);
         }
+    }
 
-        // Generate 100 patients and randomly assign to doctors (max 10 per doctor)
-        for (int i = 1; i <= 100; i++) {
-            String patientName = "Patient" + i;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-            boolean assigned = false;
-            while (!assigned) {
-                // Pick a random doctor
-                int docId = 1 + random.nextInt(100);
-                String docKey = String.valueOf(docId);
-                Person doc = doctors.get(docKey);
+    public String getName() {
+        return name;
+    }
 
-                if (doc.getPatients().size() < 10) {
-                    doc.addPatient(patientName);
-                    assigned = true;
-                }
-            }
-        }
+    public String getAvailability() {
+        return availability;
+    }
 
-        // User interaction
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
+    public String getSpecialty() {
+        return specialty;
+    }
 
-        while (running) {
-            System.out.println("\nOptions: view | update | delete | exit");
-            System.out.print("What would you like to do? ");
-            String action = scanner.nextLine().toLowerCase();
+    public List<String> getPatients() {
+        return patients;
+    }
 
-            switch (action) {
-                case "view":
-                    ArrayList<String> keys = new ArrayList<>(doctors.keySet());
-                    keys.sort(null);
-                    for (String key : keys) {
-                        System.out.println(doctors.get(key));
-                    }
-                    break;
-
-                case "update":
-                    System.out.print("Enter doctor number to update: ");
-                    String updateKey = scanner.nextLine();
-                    if (doctors.containsKey(updateKey)) {
-                        Person doctor = doctors.get(updateKey);
-                        System.out.print("New name (current: " + doctor.getName() + "): ");
-                        String newName = scanner.nextLine();
-                        System.out.print("New specialty (current: " + doctor.getSpecialty() + "): ");
-                        String newSpecialty = scanner.nextLine();
-                        doctor.setName(newName);
-                        doctor.setSpecialty(newSpecialty);
-                        System.out.println("Updated: " + doctor);
-                    } else {
-                        System.out.println("Doctor not found.");
-                    }
-                    break;
-
-                case "delete":
-                    System.out.print("Enter doctor number to delete: ");
-                    String deleteKey = scanner.nextLine();
-                    if (doctors.remove(deleteKey) != null) {
-                        System.out.println("Doctor " + deleteKey + " removed.");
-                    } else {
-                        System.out.println("Doctor not found.");
-                    }
-                    break;
-
-                case "exit":
-                    running = false;
-                    break;
-
-                default:
-                    System.out.println("Invalid option.");
-            }
-        }
-
-        scanner.close();
+    public String toString() {
+        return "Name: " + name + " || Specialty: " + specialty + " || Patients: " + String.join(", ", patients) + " || Availability: " + availability;
     }
 }

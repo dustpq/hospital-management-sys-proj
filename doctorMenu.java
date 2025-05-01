@@ -1,6 +1,3 @@
-import com.sun.tools.javac.Main;
-
-import java.util.LinkedHashMap;
 /**
  *
  * @author michelle
@@ -9,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.*;
 
 public class doctorMenu {
-    static HashMap<String, Person> doctors = new HashMap<>();
+    static HashMap<String, Doctor> doctors = new HashMap<>();
 
     static String[] specialties = {
             "Family Medicine", "Pediatrics", "Dermatology", "Neurology", "Oncology",
@@ -32,7 +29,7 @@ public class doctorMenu {
             String doctorId = String.valueOf(startingId + i);
             String specialty = specialties[random.nextInt(specialties.length)];
             String availability = availabilities[random.nextInt(availabilities.length)];
-            doctors.put(doctorId, new Person(specialty, availability));
+            doctors.put(doctorId, new Doctor(specialty, availability));
         }
 
         // Generate 100 patients and randomly assign to doctors (max 10 per doctor)
@@ -45,7 +42,7 @@ public class doctorMenu {
                 // Pick a random doctor
                 int docId = startingId + random.nextInt(100); // Ensure the ID is within the generated range
                 String docKey = String.valueOf(docId);
-                Person doc = doctors.get(docKey);
+                Doctor doc = doctors.get(docKey);
 
                 // Check if the doctor exists and has less than 10 patients
                 if (doc != null && doc.getPatients().size() < 10) {
@@ -77,7 +74,7 @@ public class doctorMenu {
                     System.out.print("Enter doctor number to update: ");
                     String updateKey = scanner.nextLine();
                     if (doctors.containsKey(updateKey)) {
-                        Person doctor = doctors.get(updateKey);
+                        Doctor doctor = doctors.get(updateKey);
                         System.out.print("New name (current: " + doctor.getName() + "): ");
                         String newName = scanner.nextLine();
                         System.out.print("New specialty (current: " + doctor.getSpecialty() + "): ");
@@ -112,7 +109,7 @@ public class doctorMenu {
                             .orElse(startingId + 99);
 
                     String newDoctorId = String.valueOf(maxId + 1);
-                    doctors.put(newDoctorId, new Person(specialty, availability));
+                    doctors.put(newDoctorId, new Doctor(specialty, availability));
 
                     System.out.println("\nDoctor added successfully:");
                     printDoctorInfo(doctors.size(), newDoctorId, doctors.get(newDoctorId));
@@ -124,7 +121,7 @@ public class doctorMenu {
                     boolean assigned = false;
 
                     for (String docKey : doctors.keySet()) {
-                        Person doc = doctors.get(docKey);
+                        Doctor doc = doctors.get(docKey);
                         if (doc != null && doc.getPatients().size() < 10) { // Ensure doc is not null
                             doc.addPatient(newPatient);
                             System.out.println("\n" + newPatient + " assigned to Doctor ID: " + docKey);
@@ -160,7 +157,7 @@ public class doctorMenu {
      * @param doctorId The ID of the doctor.
      * @param doctor The Person object representing the doctor.
      */
-    private static void printDoctorInfo(int index, String doctorId, Person doctor) {
+    private static void printDoctorInfo(int index, String doctorId, Doctor doctor) {
         System.out.println("Doctor #" + index);
         System.out.println("ID: " + doctorId);
         System.out.println("Name: " + doctor.getName());
