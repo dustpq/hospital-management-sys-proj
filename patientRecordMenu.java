@@ -1,9 +1,7 @@
-import com.sun.tools.javac.Main;
-
 import java.util.Scanner;
 
 public class patientRecordMenu {
-    static Patient[] patients = new Patient[100];
+    static Patient[] patients = new Patient[101];
     static int patientCount = 0;
 
     public static void mainMenu() {
