@@ -4,7 +4,6 @@ import java.util.*;
 
 /*
 * @author: Dustin Quintanilla
-* This class provides a menu-driven interface for managing appointments.
 */
 
 public class appointmentMenu {
@@ -30,7 +29,7 @@ public class appointmentMenu {
      */
     public static void mainMenu() {
 
-        Set<Integer> validMenuOptions = Set.of(1, 2, 3);
+        Set<Integer> validMenuOptions = Set.of(1, 2, 3, 4);
 
         MainApp.clearScreen();
         String menuPrompt = """
@@ -55,6 +54,10 @@ public class appointmentMenu {
                 manageExistingMenu();
                 break;
             case 3:
+                System.out.println("Preparing to search for appointment...");
+                pause(1000);
+                searchAppointments();
+            case 4:
                 System.out.println("Exiting to main menu...");
                 pause(1000);
                 MainApp.mainMenu();
@@ -71,6 +74,7 @@ public class appointmentMenu {
         MainApp.clearScreen();
         System.out.println("New Appointment Creation");
 
+        user_input.nextLine();
         System.out.print("Enter patient name: ");
         String name = user_input.nextLine();
 
@@ -82,11 +86,12 @@ public class appointmentMenu {
             date = user_input.nextLine();
         }
 
-        System.out.print("Enter appointment time (hh:mm a) case-sensitive: "); // Fixed typo in prompt
+        System.out.print("Enter appointment time (hh:mm a): ");
         String time = user_input.nextLine();
+        time = time.toUpperCase();
         while (!validateFormat(time, "time")) {
             System.out.println("Invalid format! Try again.");
-            System.out.print("Enter appointment time (hh:mm a) case-sensitive: ");
+            System.out.print("Enter appointment time (hh:mm a): ");
             time = user_input.nextLine();
         }
 
@@ -95,6 +100,7 @@ public class appointmentMenu {
 
         Appointment newAppointment = new Appointment(name, date, time, doctor_name);
         appointmentQueue.add(newAppointment);
+        syncAppointments(); // Sync after adding a new appointment
         System.out.println("New Appointment created!");
 
         System.out.println("Returning to appointment menu...");
@@ -168,6 +174,12 @@ public class appointmentMenu {
      * Allows navigation through pages or exiting the view.
      */
     public static int printCurrentAppointments() {
+        if (appointmentList.isEmpty()) {
+            System.out.println("No appointments available.");
+            pause(1000);
+            return -1; // Indicate no appointments
+        }
+
         int pageSize = 10;
         int totalPages = (int) Math.ceil((double) appointmentList.size() / pageSize);
         int currentPage = 1;
@@ -268,7 +280,7 @@ public class appointmentMenu {
             date = user_input.nextLine();
         }
 
-        System.out.print("Enter appointment time (hh:mm a) case-sensitive: "); // Fixed typo in prompt
+        System.out.print("Enter appointment time (hh:mm a) case-sensitive: ");
         String time = user_input.nextLine();
         while (!validateFormat(time, "time")) {
             System.out.println("Invalid format! Try again.");
@@ -280,40 +292,40 @@ public class appointmentMenu {
         String doctor_name = user_input.nextLine();
 
         appointmentQueue.remove(a);
-        a = new Appointment(name, date, time, doctor_name);
-        appointmentQueue.add(a);
-        System.out.println("Appointment edited!");
+        Appointment updatedAppointment = new Appointment(name, date, time, doctor_name);
+        appointmentQueue.add(updatedAppointment);
+        syncAppointments(); // Sync after editing an appointment
 
+        System.out.println("Appointment edited!");
         System.out.println("Returning to appointment menu...");
-        syncAppointments();
         pause(1000);
         mainMenu();
     }
 
     public static void deleteAppointment(Appointment a) {
-
-        Set<Integer> validMenuOptions = Set.of(1,2);
+        MainApp.clearScreen();
         System.out.println("Appointment to be deleted:");
         a.printDetails();
 
+        Set<Integer> validMenuOptions = Set.of(1, 2);
         String prompt = """
-                Are you sure you want to delete this appointment?
-                1.) Yes | 2.) No
-                """;
+            Are you sure you want to delete this appointment?
+            1.) Yes | 2.) No
+            """;
 
         int choice = getMenuChoice(validMenuOptions, user_input, prompt);
 
         if (choice == 1) {
-            appointmentList.remove(a);
-            syncAppointments();
+            appointmentQueue.remove(a);
+            syncAppointments(); // Sync after deleting an appointment
             System.out.println("Appointment deleted.");
         } else {
             System.out.println("Cancelled deletion.");
         }
+
         System.out.println("Returning to previous menu...");
         pause(1000);
         manageExistingMenu();
-
     }
 
     /**
@@ -338,6 +350,57 @@ public class appointmentMenu {
             } catch (DateTimeParseException _) {}
         }
         return result;
+    }
+
+    /**
+     * Allows the user to search for appointments by patient name, doctor name, or date.
+     */
+    public static void searchAppointments() {
+        MainApp.clearScreen();
+        System.out.println("Search Appointments");
+
+        System.out.println("Search by:");
+        System.out.println("1.) Patient Name");
+        System.out.println("2.) Doctor Name");
+        System.out.println("3.) Appointment Date (MM/dd/yyyy)");
+        System.out.println("4.) Go Back");
+
+        Set<Integer> validOptions = Set.of(1, 2, 3, 4);
+        int choice = getMenuChoice(validOptions, user_input, "Enter your choice:");
+
+        if (choice == 4) {
+            mainMenu();
+            return;
+        }
+
+        System.out.print("Enter search term: ");
+        String searchTerm = user_input.nextLine();
+
+        List<Appointment> results = new ArrayList<>();
+        switch (choice) {
+            case 1 -> results = appointmentList.stream()
+                    .filter(a -> a.getDetail("name").equalsIgnoreCase(searchTerm))
+                    .toList();
+            case 2 -> results = appointmentList.stream()
+                    .filter(a -> a.getDetail("doctor").equalsIgnoreCase(searchTerm))
+                    .toList();
+            case 3 -> results = appointmentList.stream()
+                    .filter(a -> a.getDetail("date").equals(searchTerm))
+                    .toList();
+        }
+
+        if (results.isEmpty()) {
+            System.out.println("No appointments found matching the search criteria.");
+        } else {
+            System.out.println("Search Results:");
+            for (Appointment appointment : results) {
+                appointment.printDetails();
+            }
+        }
+
+        System.out.println("Returning to appointment menu...");
+        pause(2000);
+        mainMenu();
     }
 
     /**
@@ -399,3 +462,4 @@ public class appointmentMenu {
     }
 
 }
+

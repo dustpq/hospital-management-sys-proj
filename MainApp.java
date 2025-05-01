@@ -60,16 +60,19 @@ public class MainApp {
             case 3:
                 System.out.println("Starting doctor management...");
                 pause(1000);
-                //Insert method to start doctor menu
+                clearScreen();
+                doctorMenu.mainMenu();
                 break;
             case 4:
                 System.out.println("Starting patient queue management...");
                 pause(1000);
-                //Insert method to start patient queue method
+                clearScreen();
+                emergencyPatientMenu.mainMenu();
                 break;
             case 5:
                 System.out.println("Exiting...");
                 System.out.println("Goodbye!");
+                pause(1000);
                 break;
         }
 

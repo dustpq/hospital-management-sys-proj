@@ -1,3 +1,5 @@
+import com.sun.tools.javac.Main;
+
 import java.util.Scanner;
 
 public class patientRecordMenu {
@@ -9,7 +11,7 @@ public class patientRecordMenu {
         int choice;
 
         do {
-            System.out.println("\n--- Patient Record Management ---");
+            System.out.println("--- Patient Record Management ---");
             System.out.println("1. Add Patient");
             System.out.println("2. View All Patients");
             System.out.println("3. Search Patient by Name");
@@ -24,6 +26,7 @@ public class patientRecordMenu {
                 case 3 -> searchPatient(sc);
                 case 4 -> {
                     System.out.println("Exiting patient menu...");
+                    MainApp.pause(1000);
                     MainApp.mainMenu();
                 }
                 default -> System.out.println("Invalid choice! Please try again.");
