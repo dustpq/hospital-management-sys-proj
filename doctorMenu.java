@@ -43,11 +43,12 @@ public class doctorMenu {
             boolean assigned = false;
             while (!assigned) {
                 // Pick a random doctor
-                int docId = 1 + random.nextInt(100);
+                int docId = startingId + random.nextInt(100); // Ensure the ID is within the generated range
                 String docKey = String.valueOf(docId);
                 Person doc = doctors.get(docKey);
 
-                if (doc.getPatients().size() < 10) {
+                // Check if the doctor exists and has less than 10 patients
+                if (doc != null && doc.getPatients().size() < 10) {
                     doc.addPatient(patientName);
                     assigned = true;
                 }
@@ -124,7 +125,7 @@ public class doctorMenu {
 
                     for (String docKey : doctors.keySet()) {
                         Person doc = doctors.get(docKey);
-                        if (doc.getPatients().size() < 10) {
+                        if (doc != null && doc.getPatients().size() < 10) { // Ensure doc is not null
                             doc.addPatient(newPatient);
                             System.out.println("\n" + newPatient + " assigned to Doctor ID: " + docKey);
                             assigned = true;
@@ -132,7 +133,7 @@ public class doctorMenu {
                         }
                     }
 
-                if (!assigned) {
+                    if (!assigned) {
                         System.out.println("\nNo available doctors to assign the patient.");
                         patientCounter--;
                     }
