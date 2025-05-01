@@ -56,7 +56,7 @@ public class doctorMenu {
         boolean running = true;
 
         while (running) {
-            System.out.println("\nOptions: view | update | delete | add doctor | add doctor | exit");
+            System.out.println("\nOptions: view | update | delete | add doctor | add patient | exit");
             System.out.print("What would you like to do? ");
             String action = scanner.nextLine().toLowerCase();
 
