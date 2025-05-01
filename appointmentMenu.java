@@ -3,7 +3,9 @@ import java.time.format.*;
 import java.util.*;
 
 /*
-* @author: Dustin Quintanilla
+* @author:
+* Dustin Quintanilla
+* This class provides a menu-driven interface for managing appointments.
 */
 
 public class appointmentMenu {
@@ -15,6 +17,7 @@ public class appointmentMenu {
                     + b.getDetail("time").compareTo(a.getDetail("time"))
     );
 
+    // List to store appointments for easier iteration and pagination.
     static List<Appointment> appointmentList = new ArrayList<>(appointmentQueue);
 
     static Scanner user_input = new Scanner(System.in);
@@ -31,7 +34,7 @@ public class appointmentMenu {
 
         Set<Integer> validMenuOptions = Set.of(1, 2, 3, 4);
 
-        MainApp.clearScreen();
+        clearScreen();
         String menuPrompt = """
         Welcome to the Appointment Management Menu!
         What would you like to do?
@@ -72,7 +75,7 @@ public class appointmentMenu {
      * Prompts the user for appointment details and adds it to the queue.
      */
     public static void newAppointmentMenu() {
-        MainApp.clearScreen();
+        clearScreen();
         System.out.println("New Appointment Creation");
 
         user_input.nextLine();
@@ -83,8 +86,9 @@ public class appointmentMenu {
         String date = user_input.nextLine();
         while (!validateFormat(date, "date")) {
             System.out.println("Invalid format! Try again.");
+            System.out.println("Previous input: " + date);
             System.out.print("Enter appointment date (MM/dd/yyyy) case-sensitive: ");
-            date = user_input.nextLine();
+            date = user_input.nextLine().trim();
         }
 
         System.out.print("Enter appointment time (hh:mm a): ");
@@ -92,8 +96,10 @@ public class appointmentMenu {
         time = time.toUpperCase();
         while (!validateFormat(time, "time")) {
             System.out.println("Invalid format! Try again.");
+            System.out.println("Previous input: " + time);
             System.out.print("Enter appointment time (hh:mm a): ");
             time = user_input.nextLine();
+            time = time.toUpperCase();
         }
 
         System.out.print("Enter doctor name: ");
@@ -118,7 +124,7 @@ public class appointmentMenu {
 
         Set<Integer> validMenuOptions = Set.of(1, 2, 3);
 
-        MainApp.clearScreen();
+        clearScreen();
         System.out.println("Managing existing appointments...");
         System.out.println("Current Appointments: ");
         int order = 1;
@@ -173,6 +179,7 @@ public class appointmentMenu {
     /**
      * Prints the current appointments in a paginated format.
      * Allows navigation through pages or exiting the view.
+     * @return The index of the selected appointment, or -1 if no selection is made.
      */
     public static int printCurrentAppointments() {
         if (appointmentList.isEmpty()) {
@@ -191,7 +198,7 @@ public class appointmentMenu {
         }
 
         while (true) {
-            MainApp.clearScreen();
+            clearScreen();
             System.out.println("Current Appointments (Page " + currentPage + " of " + totalPages + "):");
 
             int start = (currentPage - 1) * pageSize;
@@ -262,9 +269,10 @@ public class appointmentMenu {
     /**
      * Edits the details of an existing appointment.
      * Prompts the user for new details and updates the appointment.
+     * @param a The appointment to be edited.
      */
     public static void editAppointment(Appointment a) {
-        MainApp.clearScreen();
+        clearScreen();
         System.out.println("Editing Existing Appointment");
 
         System.out.println("Current Appointment Details:");
@@ -303,8 +311,12 @@ public class appointmentMenu {
         mainMenu();
     }
 
+    /**
+     * Deletes an appointment after user confirmation.
+     * @param a The appointment to be deleted.
+     */
     public static void deleteAppointment(Appointment a) {
-        MainApp.clearScreen();
+        clearScreen();
         System.out.println("Appointment to be deleted:");
         a.printDetails();
 
@@ -331,9 +343,10 @@ public class appointmentMenu {
 
     /**
      * Allows the user to search for appointments by patient name, doctor name, or date.
+     * Displays the search results and allows further actions on the results.
      */
     public static void searchAppointments() {
-        MainApp.clearScreen();
+        clearScreen();
         System.out.println("Search Appointments");
 
         System.out.println("Search by:");
@@ -346,6 +359,8 @@ public class appointmentMenu {
         int choice = getMenuChoice(validOptions, user_input, "Enter your choice:");
 
         if (choice == 4) {
+            System.out.println("Returning to previous menu...");
+            pause(1000);
             mainMenu();
             return;
         }
@@ -380,12 +395,14 @@ public class appointmentMenu {
             results.get(i).printDetails();
         }
 
-        System.out.println("\nOptions:");
-        System.out.println("1.) Edit Appointment");
-        System.out.println("2.) Delete Appointment");
-        System.out.println("3.) Go Back");
+        String options = """
+                \nOptions:
+                1.) Edit Appointment
+                2.) Delete Appointment
+                3.) Go Back
+                """;
 
-        int action = getMenuChoice(Set.of(1, 2, 3), user_input, "Enter your choice:");
+        int action = getMenuChoice(Set.of(1, 2, 3), user_input, options);
 
         if (action == 3) {
             mainMenu();
@@ -438,37 +455,20 @@ public class appointmentMenu {
 
     /**
      * Displays a menu prompt and gets a valid choice from the user.
+     * References the method in MainApp to avoid duplication.
      * @param validOptions A set of valid menu options.
      * @param scanner The scanner for user input.
      * @param menuPrompt The menu prompt to display.
      * @return The user's valid choice.
      */
     private static int getMenuChoice(Set<Integer> validOptions, Scanner scanner, String menuPrompt) {
-        int choice = -1;
-        boolean invalidChoice;
-        do {
-            System.out.println(menuPrompt);
-            invalidChoice = false;
-            try {
-                choice = scanner.nextInt();
-                if (!validOptions.contains(choice)) {
-                    System.out.println("Invalid option! Enter a valid option.");
-                    invalidChoice = true;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input! Please enter a number.");
-                scanner.next(); // Clear invalid input
-                invalidChoice = true;
-            }
-        } while (invalidChoice);
-        return choice;
+        return MainApp.getMenuChoice(validOptions, scanner, menuPrompt);
     }
 
     /**
-     * Syncs the queue and list whenever called
-     * Should be called whenever one of the two are updated
+     * Syncs the queue and list whenever called.
+     * Should be called whenever one of the two is updated to ensure consistency.
      */
-
     public static void syncAppointments() {
         // Update the ArrayList from the PriorityQueue
         appointmentList = new ArrayList<>(appointmentQueue);
@@ -483,16 +483,19 @@ public class appointmentMenu {
 
     /**
      * Pauses the program for a specified amount of time.
+     * References the method in MainApp to avoid duplication.
      * @param time The time to pause in milliseconds.
      */
     public static void pause(int time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            System.out.println("An unexpected interruption occurred.");
-            Thread.currentThread().interrupt();
-        }
+        MainApp.pause(time);
+    }
+
+    /**
+     * Clears the console screen.
+     * References the method in MainApp to avoid duplication.
+     */
+    public static void clearScreen() {
+        MainApp.clearScreen();
     }
 
 }
-
