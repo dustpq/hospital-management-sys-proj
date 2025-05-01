@@ -9,24 +9,34 @@ import java.util.LinkedHashMap;
 import java.util.*;
 
 public class doctorMenu {
+    static HashMap<String, Person> doctors = new HashMap<>();
+
+    static String[] specialties = {
+            "Family Medicine", "Pediatrics", "Dermatology", "Neurology", "Oncology",
+            "Orthopedics", "Psychiatry", "Radiology", "Trauma Surgeon", "Surgery", "Emergency Medicine"
+    };
+
+    static String[] availabilities = {
+            "Mon-Fri: 7 AM – 3 PM", "Mon-Fri: 3 PM – 11 PM", "Mon-Fri: 11 PM – 7 AM",
+            "Sat & Sun: 7 AM – 7 PM", "Sat: 7 AM – 7 PM", "Sun: 7 PM – 7 AM"
+    };
+
     public static void mainMenu() {
-        HashMap<String, Person> doctors = new HashMap<>();
-        String[] specialties = {
-            "Cardiology", "Pediatrics", "Dermatology", "Neurology", "Oncology",
-            "Orthopedics", "Psychiatry", "Radiology", "Surgery", "Emergency Medicine"
-        };
+
 
         Random random = new Random();
-
+        int startingId = 2231;
+        
         // Generate 100 doctors
-        for (int i = 1; i <= 100; i++) {
-            String doctorId = String.valueOf(i);
-            String name = "Dr" + doctorId;
+        for (int i = 0; i < 100; i++) {
+            String doctorId = String.valueOf(startingId + i);
             String specialty = specialties[random.nextInt(specialties.length)];
-            doctors.put(doctorId, new Person(name, specialty));
+            String availability = availabilities[random.nextInt(availabilities.length)];
+            doctors.put(doctorId, new Person(specialty, availability));
         }
 
         // Generate 100 patients and randomly assign to doctors (max 10 per doctor)
+        int patientCounter = 100;
         for (int i = 1; i <= 100; i++) {
             String patientName = "Patient" + i;
 
@@ -49,7 +59,7 @@ public class doctorMenu {
         boolean running = true;
 
         while (running) {
-            System.out.println("\nOptions: view | update | delete | exit");
+            System.out.println("\nOptions: view | update | delete | add doctor | add patient | exit");
             System.out.print("What would you like to do? ");
             String action = scanner.nextLine().toLowerCase();
 
@@ -89,6 +99,45 @@ public class doctorMenu {
                     }
                     break;
 
+                case "add doctor":
+                    System.out.print("Enter new doctor's specialty: ");
+                    String specialty = scanner.nextLine();
+                    System.out.print("Enter new doctor's availability: ");
+                    String availability = scanner.nextLine();
+
+                    int maxId = doctors.keySet().stream()
+                            .mapToInt(Integer::parseInt)
+                            .max()
+                            .orElse(startingId + 99);
+
+                    String newDoctorId = String.valueOf(maxId + 1);
+                    doctors.put(newDoctorId, new Person(specialty, availability));
+
+                    System.out.println("\nDoctor added successfully:");
+                    printDoctorInfo(doctors.size(), newDoctorId, doctors.get(newDoctorId));
+                    break;
+
+                case "add patient":
+                    patientCounter++;
+                    String newPatient = "Patient" + patientCounter;
+                    boolean assigned = false;
+
+                    for (String docKey : doctors.keySet()) {
+                        Person doc = doctors.get(docKey);
+                        if (doc.getPatients().size() < 10) {
+                            doc.addPatient(newPatient);
+                            System.out.println("\n" + newPatient + " assigned to Doctor ID: " + docKey);
+                            assigned = true;
+                            break;
+                        }
+                    }
+
+                if (!assigned) {
+                        System.out.println("\nNo available doctors to assign the patient.");
+                        patientCounter--;
+                    }
+                    break;
+
                 case "exit":
                     running = false;
                     System.out.println("Returning to main menu...");
@@ -102,5 +151,21 @@ public class doctorMenu {
         }
 
         scanner.close();
+    }
+
+    /**
+     * Prints detailed information about a doctor.
+     * @param index The index of the doctor in the list.
+     * @param doctorId The ID of the doctor.
+     * @param doctor The Person object representing the doctor.
+     */
+    private static void printDoctorInfo(int index, String doctorId, Person doctor) {
+        System.out.println("Doctor #" + index);
+        System.out.println("ID: " + doctorId);
+        System.out.println("Name: " + doctor.getName());
+        System.out.println("Specialty: " + doctor.getSpecialty());
+        System.out.println("Availability: " + doctor.getAvailability());
+        System.out.println("Patients: " + String.join(", ", doctor.getPatients()));
+        System.out.println("-----------------------------");
     }
 }
