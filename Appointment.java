@@ -1,11 +1,18 @@
 public class Appointment {
 
-    private String name;
-    private String date;
-    private String time;
-    private String doctor_name;
-    private Doctor attending_doctor;
+    private String name; // Patient's name
+    private String date; // Appointment date in MM/dd/yyyy format
+    private String time; // Appointment time in hh:mm a format
+    private String doctor_name; // Doctor's name
+    private Doctor attending_doctor; // Reference to the attending doctor (optional)
 
+    /**
+     * Constructor to initialize an appointment with the given details.
+     * @param name The patient's name.
+     * @param date The appointment date.
+     * @param time The appointment time.
+     * @param doctor_name The doctor's name.
+     */
     public Appointment(String name, String date, String time, String doctor_name) {
         this.name = name;
         this.date = date;
@@ -13,7 +20,11 @@ public class Appointment {
         this.doctor_name = doctor_name;
     }
 
-    //setters for the appointment
+    /**
+     * Retrieves the value of a specific detail of the appointment.
+     * @param detail The detail to retrieve ("name", "date", "time", or "doctor_name").
+     * @return The value of the requested detail, or null if the detail is invalid.
+     */
     public String getDetail(String detail) {
         return switch (detail) {
             case "name" -> name;
@@ -24,7 +35,11 @@ public class Appointment {
         };
     }
 
-    //getters for the appointment
+    /**
+     * Updates the value of a specific detail of the appointment.
+     * @param detail The detail to update ("name", "date", "time", or "doctor_name").
+     * @param value The new value for the detail.
+     */
     public void setDetail(String detail, String value) {
         switch (detail) {
             case "name" -> name = value;
@@ -35,6 +50,9 @@ public class Appointment {
 
     }
 
+    /**
+     * Prints the details of the appointment in a readable format.
+     */
     public void printDetails() {
         System.out.println(
                 "Appointment for " + name +
