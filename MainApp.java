@@ -112,7 +112,6 @@ public class MainApp {
      * Note: May not work on all systems (e.g., Windows Command Prompt).
      */
     public static void clearScreen() {
-        //Clears the screen, be sure to spam this when moving between menus lmao
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
@@ -126,9 +125,7 @@ public class MainApp {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
-            System.out.println("An unexpected interruption occurred.");
             Thread.currentThread().interrupt();
         }
     }
-
 }
