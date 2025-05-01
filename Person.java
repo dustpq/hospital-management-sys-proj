@@ -13,6 +13,13 @@ public class Person {
         this.patients = new ArrayList<>();
     }
 
+    public Person(String availability, String specialty, String name) {
+        this.availability = availability;
+        this.specialty = specialty;
+        this.patients = new ArrayList<>();
+        this.name = name;
+    }
+
     public void setAvailability(String newAvailability) {
         this.availability = newAvailability;
     }

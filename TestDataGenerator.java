@@ -18,7 +18,7 @@ public class TestDataGenerator {
             String diagnosis = "Diagnosis " + i;
             String treat_history = "History " + i;
             Patient patient = new Patient(name, condition, diagnosis, treat_history);
-            patientRecordMenu.patients.add(patient); // Use ArrayList's add method
+            patientRecordMenu.patients.add(patient);
         }
         System.out.println("Generated 100 test patients for patient records.");
     }
@@ -33,7 +33,7 @@ public class TestDataGenerator {
                 default -> "Severe";
             };
             Patient patient = new Patient(name, condition, severity);
-            emergencyPatientMenu.patientQueue.add(patient); // Add to the emergency patient queue
+            emergencyPatientMenu.patientQueue.add(patient);
         }
         System.out.println("Generated 100 test emergency patients.");
     }
@@ -45,9 +45,9 @@ public class TestDataGenerator {
             String time = String.format("%02d:00 %s", (i % 12) + 1, (i % 2 == 0) ? "AM" : "PM");
             String doctorName = "Doctor " + (i % 10 + 1);
             Appointment appointment = new Appointment(patientName, date, time, doctorName);
-            appointmentMenu.appointmentQueue.add(appointment); // Add to the appointment queue
+            appointmentMenu.appointmentQueue.add(appointment);
         }
-        appointmentMenu.syncAppointments(); // Sync the queue with the list
+        appointmentMenu.syncAppointments();
         System.out.println("Generated 100 test appointments.");
     }
 
@@ -56,8 +56,9 @@ public class TestDataGenerator {
             String id = "D" + i;
             String name = "Doctor " + i;
             String specialty = doctorMenu.specialties[random.nextInt(doctorMenu.specialties.length)];
-            Person doctor = new Person(name, specialty);
-            doctorMenu.doctors.put(id, doctor); // Add to the doctor map
+            String availability = doctorMenu.availabilities[random.nextInt(doctorMenu.availabilities.length)];
+            Person doctor = new Person(availability, specialty, name);
+            doctorMenu.doctors.put(id, doctor);
         }
         System.out.println("Generated 100 test doctors.");
     }
