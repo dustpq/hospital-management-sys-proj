@@ -82,5 +82,39 @@ public class patientRecordMenu {
             System.out.println("Patient not found.");
         }
     }
-}
+    static void editPatient(Scanner sc) {
+        System.out.print("Enter the patient's name to edit: ");
+        String name = sc.nextLine();
+        for (int i = 0; i < patientCount; i++) {
+            if (patients[i].getDetail("name").equalsIgnoreCase(name)) {
+                System.out.print("Enter new age: ");
+                String newAge = sc.nextLine();
+                System.out.print("Enter new diagnosis: ");
+                String newDiagnosis = sc.nextLine();
+                System.out.print("Enter new treatment history: ");
+                String newTreatment = sc.nextLine();
 
+                patients[i] = new Patient(name, newAge, newDiagnosis, newTreatment);
+                System.out.println("Patient updated successfully!");
+                return;
+            }
+        }
+        System.out.println("Patient not found.");
+    }
+
+    static void deletePatient(Scanner sc) {
+        System.out.print("Enter the patient's name to delete: ");
+        String name = sc.nextLine();
+        for (int i = 0; i < patientCount; i++) {
+            if (patients[i].getDetail("name").equalsIgnoreCase(name)) {
+                for (int j = i; j < patientCount - 1; j++) {
+                    patients[j] = patients[j + 1]; // shift elements left
+                }
+                patients[--patientCount] = null;
+                System.out.println("Patient deleted successfully.");
+                return;
+            }
+        }
+        System.out.println("Patient not found.");
+    }
+}
