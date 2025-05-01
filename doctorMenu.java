@@ -27,6 +27,7 @@ public class doctorMenu {
         }
 
         // Generate 100 patients and randomly assign to doctors (max 10 per doctor)
+        int patientCounter = 100;
         for (int i = 1; i <= 100; i++) {
             String patientName = "Patient" + i;
 
@@ -49,7 +50,7 @@ public class doctorMenu {
         boolean running = true;
 
         while (running) {
-            System.out.println("\nOptions: view | update | delete | exit");
+            System.out.println("\nOptions: view | update | delete | add doctor | add doctor | exit");
             System.out.print("What would you like to do? ");
             String action = scanner.nextLine().toLowerCase();
 
@@ -89,7 +90,7 @@ public class doctorMenu {
                     }
                     break;
 
-                case "add":
+                case "add doctor":
                     System.out.print("Enter new doctor's specialty: ");
                     String specialty = scanner.nextLine();
                     System.out.print("Enter new doctor's availability: ");
@@ -106,6 +107,21 @@ public class doctorMenu {
                     System.out.println("\nDoctor added successfully:");
                     printDoctorInfo(doctors.size(), newDoctorId, doctors.get(newDoctorId));
                     break;
+
+                case "add patient":
+                    patientCounter++;
+                    String newPatient = "Patient" + patientCounter;
+                    boolean assigned = false;
+
+                    for (String docKey : doctors.keySet()) {
+                        Person doc = doctors.get(docKey);
+                        if (doc.getPatients().size() < 10) {
+                            doc.addPatient(newPatient);
+                            System.out.println("\n" + newPatient + " assigned to Doctor ID: " + docKey);
+                            assigned = true;
+                            break;
+                        }
+                    }
 
                 case "exit":
                     running = false;
