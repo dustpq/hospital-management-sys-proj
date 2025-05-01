@@ -1,8 +1,8 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class patientRecordMenu {
-    static Patient[] patients = new Patient[100];
-    static int patientCount = 0;
+    static ArrayList<Patient> patients = new ArrayList<>();
 
     public static void mainMenu() {
         Scanner sc = new Scanner(System.in);
@@ -37,10 +37,6 @@ public class patientRecordMenu {
     }
 
     static void addPatient(Scanner sc) {
-        if (patientCount >= patients.length) {
-            System.out.println("Patient record is full!");
-            return;
-        }
         System.out.print("Enter name: ");
         String name = sc.nextLine();
         System.out.print("Enter age: ");
@@ -50,19 +46,19 @@ public class patientRecordMenu {
         System.out.print("Enter treatment history: ");
         String treatmentHistory = sc.nextLine();
 
-        patients[patientCount++] = new Patient(name, age, diagnosis, treatmentHistory);
+        patients.add(new Patient(name, age, diagnosis, treatmentHistory));
         System.out.println("Patient added successfully!");
     }
 
     static void viewAllPatients() {
-        if (patientCount == 0) {
+        if (patients.isEmpty()) {
             System.out.println("No patient records available.");
             return;
         }
         System.out.println("\n--- All Patient Records ---");
-        for (int i = 0; i < patientCount; i++) {
+        for (int i = 0; i < patients.size(); i++) {
             System.out.println("\nPatient " + (i + 1) + ":");
-            patients[i].display();
+            patients.get(i).display();
         }
     }
 
@@ -71,10 +67,10 @@ public class patientRecordMenu {
         String searchName = sc.nextLine();
         boolean found = false;
 
-        for (int i = 0; i < patientCount; i++) {
-            if (patients[i].getDetail("name").equalsIgnoreCase(searchName)) {
+        for (Patient patient : patients) {
+            if (patient.getDetail("name").equalsIgnoreCase(searchName)) {
                 System.out.println("\nPatient Found:");
-                patients[i].display();
+                patient.display();
                 found = true;
                 break;
             }
@@ -84,11 +80,12 @@ public class patientRecordMenu {
             System.out.println("Patient not found.");
         }
     }
+
     static void editPatient(Scanner sc) {
         System.out.print("Enter the patient's name to edit: ");
         String name = sc.nextLine();
-        for (int i = 0; i < patientCount; i++) {
-            if (patients[i].getDetail("name").equalsIgnoreCase(name)) {
+        for (int i = 0; i < patients.size(); i++) {
+            if (patients.get(i).getDetail("name").equalsIgnoreCase(name)) {
                 System.out.print("Enter new age: ");
                 String newAge = sc.nextLine();
                 System.out.print("Enter new diagnosis: ");
@@ -96,7 +93,7 @@ public class patientRecordMenu {
                 System.out.print("Enter new treatment history: ");
                 String newTreatment = sc.nextLine();
 
-                patients[i] = new Patient(name, newAge, newDiagnosis, newTreatment);
+                patients.set(i, new Patient(name, newAge, newDiagnosis, newTreatment));
                 System.out.println("Patient updated successfully!");
                 return;
             }
@@ -107,12 +104,9 @@ public class patientRecordMenu {
     static void deletePatient(Scanner sc) {
         System.out.print("Enter the patient's name to delete: ");
         String name = sc.nextLine();
-        for (int i = 0; i < patientCount; i++) {
-            if (patients[i].getDetail("name").equalsIgnoreCase(name)) {
-                for (int j = i; j < patientCount - 1; j++) {
-                    patients[j] = patients[j + 1]; // shift elements left
-                }
-                patients[--patientCount] = null;
+        for (int i = 0; i < patients.size(); i++) {
+            if (patients.get(i).getDetail("name").equalsIgnoreCase(name)) {
+                patients.remove(i);
                 System.out.println("Patient deleted successfully.");
                 return;
             }
