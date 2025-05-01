@@ -12,8 +12,8 @@ public class doctorMenu {
     public static void mainMenu() {
         HashMap<String, Person> doctors = new HashMap<>();
         String[] specialties = {
-            "Cardiology", "Pediatrics", "Dermatology", "Neurology", "Oncology",
-            "Orthopedics", "Psychiatry", "Radiology", "Surgery", "Emergency Medicine"
+            "Family Medicine", "Pediatrics", "Dermatology", "Neurology", "Oncology",
+            "Orthopedics", "Psychiatry", "Radiology", "Trauma Surgeon", "Surgery", "Emergency Medicine"
         };
 
         String[] availabilities = {
