@@ -15,7 +15,9 @@ public class patientRecordMenu {
             System.out.println("1. Add Patient");
             System.out.println("2. View All Patients");
             System.out.println("3. Search Patient by Name");
-            System.out.println("4. Exit");
+            System.out.println("4. Edit Patient");
+            System.out.println("5. Delete Patient");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
             choice = sc.nextInt();
             sc.nextLine(); // consume newline
@@ -24,14 +26,16 @@ public class patientRecordMenu {
                 case 1 -> addPatient(sc);
                 case 2 -> viewAllPatients();
                 case 3 -> searchPatient(sc);
-                case 4 -> {
+                case 4 -> editPatient(sc);
+                case 5 -> deletePatient(sc);
+                case 6 -> {
                     System.out.println("Exiting patient menu...");
                     MainApp.pause(1000);
                     MainApp.mainMenu();
                 }
                 default -> System.out.println("Invalid choice! Please try again.");
             }
-        } while (choice != 4);
+        } while (choice != 6);
     }
 
     static void addPatient(Scanner sc) {
