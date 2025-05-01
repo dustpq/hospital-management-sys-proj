@@ -126,13 +126,6 @@ public class appointmentMenu {
 
         clearScreen();
         System.out.println("Managing existing appointments...");
-        System.out.println("Current Appointments: ");
-        int order = 1;
-
-        for (Appointment appointment : appointmentQueue) {
-            System.out.print(order + ".) ");
-            appointment.printDetails();
-        }
 
         String menuPrompt =
         """
@@ -173,7 +166,6 @@ public class appointmentMenu {
                 mainMenu();
                 break;
         }
-
     }
 
     /**
@@ -182,6 +174,8 @@ public class appointmentMenu {
      * @return The index of the selected appointment, or -1 if no selection is made.
      */
     public static int printCurrentAppointments() {
+        syncAppointments(); // Ensure the list is up-to-date with the queue
+
         if (appointmentList.isEmpty()) {
             System.out.println("No appointments available.");
             pause(1000);
@@ -191,11 +185,6 @@ public class appointmentMenu {
         int pageSize = 10;
         int totalPages = (int) Math.ceil((double) appointmentList.size() / pageSize);
         int currentPage = 1;
-
-        if (appointmentList.isEmpty()) {
-            System.out.println("No appointments available.");
-            return -1; // Indicate no appointments
-        }
 
         while (true) {
             clearScreen();
