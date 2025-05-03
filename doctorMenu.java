@@ -23,13 +23,14 @@ public class doctorMenu {
 
         Random random = new Random();
         int startingId = 2231;
-        
+
         // Generate 100 doctors
         for (int i = 0; i < 100; i++) {
             String doctorId = String.valueOf(startingId + i);
             String specialty = specialties[random.nextInt(specialties.length)];
             String availability = availabilities[random.nextInt(availabilities.length)];
-            doctors.put(doctorId, new Doctor(specialty, availability));
+            String name = "Doctor " + (i + 1);
+            doctors.put(doctorId, new Doctor(name, specialty, availability));
         }
 
         // Generate 100 patients and randomly assign to doctors (max 10 per doctor)
@@ -57,7 +58,7 @@ public class doctorMenu {
         boolean running = true;
 
         while (running) {
-            System.out.println("\nOptions: view | update | delete | add doctor | add patient | exit");
+            System.out.println("\nOptions: view | search | update | delete | add doctor | add patient | exit");
             System.out.print("What would you like to do? ");
             String action = scanner.nextLine().toLowerCase();
 
@@ -65,8 +66,40 @@ public class doctorMenu {
                 case "view":
                     ArrayList<String> keys = new ArrayList<>(doctors.keySet());
                     keys.sort(null);
+                    int count = 1;
                     for (String key : keys) {
-                        System.out.println(doctors.get(key));
+                        Doctor doctor = doctors.get(key);
+                        if (doctor != null) {
+                            // Inject fallback name only if null
+                            if (doctor.getName() == null || doctor.getName().isEmpty()) {
+                                doctor.setName("Doctor " + count);
+                            }
+
+                            // Inject other fallbacks if needed
+                            if (doctor.getSpecialty() == null) doctor.setSpecialty("Unknown");
+                            if (doctor.getAvailability() == null) doctor.setAvailability("Unknown");
+
+                            printDoctorInfo(count, key, doctor);
+                        } else {
+                            System.out.println("Doctor #" + count + ": [No data]");
+                            System.out.println("-----------------------------");
+                        }
+                        count++;
+                    }
+                    break;
+
+                case "search":
+                    System.out.print("Enter doctor ID to search: ");
+                    String searchKey = scanner.nextLine();
+                    if (doctors.containsKey(searchKey)) {
+                        ArrayList<String> sortedKeys = new ArrayList<>(doctors.keySet());
+                        sortedKeys.sort(null);
+                        int doctorNumber = sortedKeys.indexOf(searchKey) + 1;
+                        Doctor doc = doctors.get(searchKey);
+                        System.out.println("\nDoctor found...");
+                        printDoctorInfo(doctorNumber, searchKey, doc);
+                    } else {
+                        System.out.println("\nDoctor not found.");
                     }
                     break;
 
@@ -109,7 +142,9 @@ public class doctorMenu {
                             .orElse(startingId + 99);
 
                     String newDoctorId = String.valueOf(maxId + 1);
-                    doctors.put(newDoctorId, new Doctor(specialty, availability));
+                    System.out.print("Enter new doctor's name: ");
+                    String name = scanner.nextLine();
+                    doctors.put(newDoctorId, new Doctor(name, specialty, availability));
 
                     System.out.println("\nDoctor added successfully:");
                     printDoctorInfo(doctors.size(), newDoctorId, doctors.get(newDoctorId));
