@@ -51,9 +51,9 @@ public class TestDataGenerator {
             String date = randomDate.format(dateFormatter);
 
             // Generate random time between 7 AM and 8 PM
-            int hour = 7 + random.nextInt(14); // 7 AM to 8 PM (14 hours range)
+            int hour = 7 + random.nextInt(14);
             String period = (hour < 12) ? "AM" : "PM";
-            int adjustedHour = (hour > 12) ? hour - 12 : hour; // Convert to 12-hour format
+            int adjustedHour = (hour > 12) ? hour - 12 : hour;
             String time = String.format("%02d:00 %s", adjustedHour, period);
 
             String doctorName = "Doctor " + (i % 10 + 1);
