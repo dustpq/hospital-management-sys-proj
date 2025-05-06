@@ -80,6 +80,7 @@ public class MainApp {
         int choice = -1;
         boolean invalidChoice;
         do {
+            clearScreen();
             System.out.println(menuPrompt);
             invalidChoice = false;
             try {
