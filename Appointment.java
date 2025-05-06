@@ -62,4 +62,11 @@ public class Appointment {
         );
     }
 
+    public String getDetails() {
+        return "Appointment for " + name +
+                " on " + date +
+                " at " + time +
+                " with Dr. " + doctor_name;
+    }
+
 }
